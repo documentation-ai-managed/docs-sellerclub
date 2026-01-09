@@ -10,116 +10,127 @@
     }
   },
   "navigation": {
-    "tabs": [
+    "products": [
       {
-        "tab": "Documentation",
-        "icon": "book",
-        "groups": [
+        "product": "MoySklad",
+        "tabs": [
           {
-            "group": "Getting Started",
-            "icon": "rocket",
+            "tab": "Documentation",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "icon": "rocket",
+                "pages": [
+                  {
+                    "title": "Introduction",
+                    "path": "introduction",
+                    "icon": "home"
+                  },
+                  {
+                    "title": "Quickstart",
+                    "path": "quickstart",
+                    "icon": "zap"
+                  }
+                ]
+              },
+              {
+                "group": "Core Features",
+                "icon": "layers",
+                "pages": [
+                  {
+                    "title": "Features",
+                    "path": "features",
+                    "icon": "star"
+                  }
+                ]
+              },
+              {
+                "group": "Integrations",
+                "icon": "plug",
+                "pages": [
+                  {
+                    "title": "Integrations",
+                    "path": "integrations",
+                    "icon": "link"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "icon": "code",
+            "groups": [
+              {
+                "group": "Endpoints",
+                "openapi": "openapi.yaml"
+              }
+            ]
+          },
+          {
+            "tab": "Help Center",
+            "icon": "help-circle",
             "pages": [
               {
-                "title": "Introduction",
-                "path": "introduction",
+                "title": "Help Center",
+                "path": "help-center",
                 "icon": "home"
               },
               {
-                "title": "Quickstart",
-                "path": "quickstart",
-                "icon": "zap"
+                "group": "FAQs",
+                "icon": "help-circle",
+                "expandable": false,
+                "pages": [
+                  {
+                    "title": "How to Connect a Marketplace",
+                    "path": "help-center/faq/how-to-connect-marketplace"
+                  }
+                ]
+              },
+              {
+                "group": "Troubleshooting",
+                "icon": "alert-triangle",
+                "expandable": false,
+                "pages": [
+                  {
+                    "title": "No Orders Syncing",
+                    "path": "help-center/troubleshooting/no-orders-syncing"
+                  }
+                ]
+              },
+              {
+                "group": "Guides",
+                "icon": "book-open",
+                "expandable": false,
+                "pages": [
+                  {
+                    "title": "Add Marketplace Integration",
+                    "path": "help-center/guides/add-marketplace-integration"
+                  }
+                ]
               }
             ]
           },
           {
-            "group": "Core Features",
-            "icon": "layers",
+            "tab": "Changelog",
+            "icon": "clock",
             "pages": [
               {
-                "title": "Features",
-                "path": "features",
-                "icon": "star"
+                "title": "Release History",
+                "path": "changelog",
+                "icon": "history"
               }
             ]
-          },
-          {
-            "group": "Integrations",
-            "icon": "plug",
-            "pages": [
-              {
-                "title": "Integrations",
-                "path": "integrations",
-                "icon": "link"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "icon": "code",
-        "groups": [
-          {
-            "group": "Endpoints",
-            "openapi": "openapi.yaml"
-          }
-        ]
-      },
-      {
-        "tab": "Help Center",
-        "icon": "help-circle",
-        "pages": [
-          {
-            "title": "Help Center",
-            "path": "help-center",
-            "icon": "home"
-          },
-          {
-            "group": "FAQs",
-            "icon": "help-circle",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "How to Connect a Marketplace",
-                "path": "help-center/faq/how-to-connect-marketplace"
-              }
-            ]
-          },
-          {
-            "group": "Troubleshooting",
-            "icon": "alert-triangle",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "No Orders Syncing",
-                "path": "help-center/troubleshooting/no-orders-syncing"
-              }
-            ]
-          },
-          {
-            "group": "Guides",
-            "icon": "book-open",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "Add Marketplace Integration",
-                "path": "help-center/guides/add-marketplace-integration"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Changelog",
-        "icon": "clock",
-        "pages": [
-          {
-            "title": "Release History",
-            "path": "changelog",
-            "icon": "history"
           }
         ]
       }
     ]
+  },
+  "template": "atlas",
+  "seo": {
+    "robots:index": false,
+    "robots:follow": false,
+    "sitemap:enabled": false
   }
 }
