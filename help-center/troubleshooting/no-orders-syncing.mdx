@@ -1,0 +1,23 @@
+---
+title: Orders Not Syncing from Marketplace
+description: Fix when orders from Ozon/Wildberries do not appear in MoySklad via SellerClub.
+---
+
+## Symptoms
+
+- New orders from marketplace are missing in MoySklad
+- No update in SellerClub order log
+
+## Quick Fix
+
+<Steps>
+  <Step title="Check Integration Status">
+    Go to **Integrations > Marketplaces** and confirm status is "Connected" for the affected marketplace.
+  </Step>
+  <Step title="Reconnect if Needed">
+    Click **Reconnect** and re-enter API credentials. Confirm successful connection message.
+  </Step>
+  <Step title="Resync Orders">
+    In SellerClub, use the **Sync Now** option under the marketplace integration.
+  </Step>
+</Steps>

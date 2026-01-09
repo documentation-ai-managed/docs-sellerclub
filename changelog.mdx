@@ -1,0 +1,128 @@
+---
+title: Changelog
+description: Track the latest updates, improvements, and bug fixes in SellerClub to stay informed about new features and changes.
+---
+
+## Recent Updates
+
+<Callout kind="info">
+  SellerClub releases new versions regularly to enhance integration stability with MoySklad, sales platforms like Ozon and Wildberries, and delivery services such as CDEK and 5Post. Check this page for the latest changes.
+</Callout>
+
+<Update label="2024-10-15" description="v1.3.0" tags={["feature", "improvement", "bugfix"]}>
+
+## New Features
+
+- Added support for Wildberries API v2 endpoints, enabling real-time order fulfillment updates.
+- Introduced automated retry logic for failed CDEK label generations.
+
+## Improvements
+
+- Enhanced MoySklad synchronization stability by reducing API rate limit conflicts by `>50%`.
+- Optimized 5Post tracking webhook processing for faster delivery status updates.
+
+## Bug Fixes
+
+- Fixed intermittent Ozon order sync failures during peak hours.
+- Resolved MoySklad inventory deduction errors when processing bulk Wildberries shipments.
+
+</Update>
+
+<Update label="2024-09-20" description="v1.2.0" tags={["feature", "bugfix"]}>
+
+## New Features
+
+- New dashboard widget for monitoring integration health across all connected services.
+- Support for custom delivery rules in CDEK and 5Post integrations.
+
+## Improvements
+
+- Streamlined order routing logic between MoySklad and multiple marketplaces.
+
+## Bug Fixes
+
+- Corrected duplicate shipment creation issues with Ozon fulfillment.
+- Patched webhook validation failures for 5Post parcel status updates.
+
+</Update>
+
+<Update label="2024-08-10" description="v1.1.0" tags={["improvement", "bugfix"]}>
+
+## New Features
+
+- Initial integration with 5Post for automated parcel creation from MoySklad orders.
+
+## Improvements
+
+- Reduced average sync latency from MoySklad to Ozon by `30ms` per order.
+
+## Bug Fixes
+
+- Fixed parsing errors in Wildberries analytics reports.
+- Addressed authentication token refresh issues for extended sessions.
+
+</Update>
+
+## Upgrade Guide
+
+Follow these steps to update SellerClub to the latest version and apply any required changes.
+
+<Steps>
+  <Step title="Backup Configuration" icon="database">
+
+    Export your current settings:
+
+````bash
+sellerclub config export > backup.json
+````
+
+  </Step>
+  <Step title="Update Package" icon="download">
+
+    <CodeGroup tabs="npm,yarn">
+````bash
+npm install sellerclub@latest
+````
+````bash
+yarn add sellerclub@latest
+````
+    </CodeGroup>
+
+  </Step>
+  <Step title="Run Migrations" icon="settings">
+
+    Apply database schema updates:
+
+````bash
+sellerclub migrate
+````
+
+  </Step>
+  <Step title="Restart Service" icon="refresh-cw">
+
+    Restart to activate new features:
+
+````bash
+systemctl restart sellerclub
+````
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  After upgrading, verify your integrations in the dashboard at `https://dashboard.example.com/integrations`.
+</Callout>
+
+## Quick Actions
+
+<Columns cols={3}>
+  <Card title="Report Issue" icon="bug" href="https://github.com/sellerclub/issues" target="_blank">
+    Found a bug? Submit details here.
+  </Card>
+  <Card title="Request Feature" icon="sparkles" href="https://github.com/sellerclub/discussions" target="_blank">
+    Suggest new integrations.
+  </Card>
+  <Card title="API Reference" icon="code" href="/authentication">
+    Explore updated endpoints.
+  </Card>
+</Columns>

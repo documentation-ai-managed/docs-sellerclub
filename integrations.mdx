@@ -1,0 +1,169 @@
+---
+title: Setting Up Integrations
+description: Learn how to connect and configure third-party sales and delivery services with SellerClub for seamless automation.
+---
+
+## Overview
+
+SellerClub automates your MoySklad backend by integrating with sales platforms like Ozon and Wildberries, plus delivery services such as CDEK and 5Post. You configure these integrations in the SellerClub dashboard to sync orders, inventory, and shipments automatically.
+
+<Callout kind="info">
+Before starting, ensure you have:
+- Active MoySklad account with API access
+- SellerClub dashboard access at `https://dashboard.sellerclub.com`
+- API credentials from each third-party service
+</Callout>
+
+## Connecting Sales Platforms
+
+Use the SellerClub dashboard to add sales platforms. Each integration requires your platform-specific API keys and client IDs.
+
+<Tabs>
+  <Tab title="Ozon" icon="shopping-cart">
+
+    <Steps>
+      <Step title="Get Ozon Credentials" icon="key">
+        Log in to your Ozon Seller account. Navigate to Settings > API Keys and generate a new Client ID and API Key.
+      </Step>
+      <Step title="Add to SellerClub" icon="settings">
+        In SellerClub dashboard, go to Integrations > Sales > Add Ozon. Enter your Client ID (`YOUR_OZON_CLIENT_ID`) and API Key (`YOUR_OZON_API_KEY`).
+      </Step>
+      <Step title="Configure Sync" icon="refresh-cw">
+        Set sync intervals (e.g., every 15 minutes) and select order statuses to import.
+      </Step>
+      <Step title="Test Connection" icon="check-circle">
+        Click Test. Verify a sample order syncs to MoySklad.
+      </Step>
+    </Steps>
+
+  </Tab>
+  <Tab title="Wildberries" icon="package">
+
+    <Steps>
+      <Step title="Obtain WB API Access" icon="key">
+        In Wildberries Cabinet, go to Settings > Access Rights > API Tokens. Create tokens for orders and analytics.
+      </Step>
+      <Step title="Configure in SellerClub" icon="settings">
+        Add Wildberries integration. Input Supplier ID, Order Management Token (`YOUR_WB_ORDER_TOKEN`), and Analytics Token (`YOUR_WB_ANALYTICS_TOKEN`).
+      </Step>
+      <Step title="Map Fields" icon="sliders">
+        Map WB statuses to MoySklad equivalents (e.g., WB "shipped" to MoySklad "dispatched").
+      </Step>
+      <Step title="Verify" icon="check-circle">
+        Run a test sync and check MoySklad for imported orders.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Configuring Delivery Integrations
+
+Delivery services like CDEK and 5Post handle shipment creation and tracking. Link them after sales platforms.
+
+<Tabs>
+  <Tab title="CDEK" icon="truck">
+
+    ```javascript
+    // Example CDEK API call from SellerClub
+    const cdekPayload = {
+      order_uuid: "order-12345",
+      sender_clinic_code: "MOS_001",
+      recipient: {
+        name: "Customer Name",
+        phone: "+7-999-123-4567",
+        address: "Moscow, Lenina 1"
+      }
+    };
+    ```
+
+    <ParamField header="Authorization" param-type="string" required="true">
+      Bearer `YOUR_CDEK_TOKEN`
+    </ParamField>
+
+    <ParamField body="order_uuid" param-type="string" required="true">
+      Unique order ID from MoySklad.
+    </ParamField>
+
+  </Tab>
+  <Tab title="5Post" icon="package">
+
+    Follow similar steps: Add account number and API key in SellerClub > Integrations > Delivery.
+
+    ```bash
+    curl -X POST https://api.5post.ru/orders \
+      -H "Authorization: Bearer YOUR_5POST_API_KEY" \
+      -d '{"order_id": "ms-order-67890", "city_code": "MSK"}'
+    ```
+
+  </Tab>
+</Tabs>
+
+## Webhooks and Advanced Syncing
+
+For real-time updates, configure webhooks. SellerClub exposes endpoints for incoming events from platforms.
+
+<Request tabs="Ozon,Wildberries" show-lines="true">
+  ```javascript
+  // Ozon order update webhook
+  POST https://api.sellerclub.com/webhooks/ozon/orders
+  {
+    "orderId": "1-123-ABC",
+    "status": "shipped",
+    "trackingNumber": "TRK789"
+  }
+  ```
+  ```javascript
+  // Wildberries shipment webhook
+  POST https://api.sellerclub.com/webhooks/wb/shipments
+  {
+    "supplierOrderId": "WB-456-DEF",
+    "status": "delivered",
+    "date": "2024-01-15T10:00:00Z"
+  }
+  ```
+</Request>
+
+<Response tabs="200,400">
+  ```json
+  {
+    "status": "accepted",
+    "synced_to_moysklad": true
+  }
+  ```
+  ```json
+  {
+    "error": "Invalid signature",
+    "code": 400
+  }
+  ```
+</Response>
+
+<Expandable title="Custom API Endpoints" default-open="false">
+
+For advanced syncing, use SellerClub's custom webhook URLs. Verify signatures with HMAC-SHA256 using your shared secret (`YOUR_WEBHOOK_SECRET`).
+
+```javascript
+// Node.js signature verification example
+const crypto = require('crypto');
+const signature = crypto.createHmac('sha256', 'YOUR_WEBHOOK_SECRET')
+  .update(payload)
+  .digest('hex');
+```
+
+</Expandable>
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card title="Monitor Syncs" icon="activity" href="#">
+    View logs in dashboard for troubleshooting.
+  </Card>
+  <Card title="Scale Integrations" icon="plus" href="/configuration">
+    Add more platforms and automate further.
+  </Card>
+</Columns>
+
+<Callout kind="tip">
+Test all integrations with sample data before going live. Monitor the first 24 hours closely.
+</Callout>

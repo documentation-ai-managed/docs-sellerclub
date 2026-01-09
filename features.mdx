@@ -1,0 +1,128 @@
+---
+title: Core Features of SellerClub
+description: Explore the main capabilities of SellerClub that automate order processing, inventory sync, and shipment tracking across integrated platforms.
+---
+
+## Overview
+
+SellerClub streamlines your e-commerce operations by integrating MoySklad with sales platforms like Ozon and Wildberries, plus delivery services such as CDEK and 5Post. You gain automated workflows that handle orders, inventory, and shipments without manual intervention. This reduces errors and saves time across your sales channels.
+
+<Columns cols={3}>
+  <Card title="Order Sync" icon="shopping-cart" href="#order-sync">
+    Pull orders automatically from multiple marketplaces into MoySklad.
+  </Card>
+  <Card title="Inventory Management" icon="package" href="#inventory">
+    Keep stock levels synced in real-time across all platforms.
+  </Card>
+  <Card title="Shipment Tracking" icon="truck" href="#shipments">
+    Create labels and track deliveries seamlessly.
+  </Card>
+</Columns>
+
+<Callout kind="info">
+  SellerClub processes over `1000` orders per hour with `<99.9%` uptime, ensuring reliable automation.
+</Callout>
+
+## Automated Order Synchronization
+
+SellerClub fetches new orders from Ozon, Wildberries, and other platforms every `5` minutes, mapping them directly to MoySklad entities. You configure webhooks or polling to trigger syncs, handling cancellations and returns automatically.
+
+<Tabs>
+  <Tab title="Ozon" icon="shopping-bag">
+    Connect your Ozon API key to pull client orders.
+
+    <Steps>
+      <Step title="Connect Ozon" icon="link">
+        In SellerClub dashboard, navigate to Integrations > Ozon. Enter your `{OZON_CLIENT_ID}` and `{OZON_API_KEY}`.
+      </Step>
+      <Step title="Map Fields" icon="settings">
+        Match Ozon order fields to MoySklad: `ozon_order_id` → `externalCode`.
+      </Step>
+      <Step title="Test Sync" icon="play">
+        Trigger a test import for order `123456789`.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Wildberries" icon="package">
+    Use Wildberries supplier API for bulk order imports.
+
+    ```javascript
+    // Example webhook payload from Wildberries
+    {
+      "orderId": "WB-2024-001",
+      "items": [
+        {
+          "sku": "SKU123",
+          "quantity": 2,
+          "price": 1500
+        }
+      ],
+      "status": "new"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Real-time Inventory Updates
+
+Maintain accurate stock across platforms with bidirectional sync. When inventory changes in MoySklad, SellerClub pushes updates to Ozon and Wildberries within seconds, preventing overselling.
+
+<CodeGroup tabs="MoySklad Update,Ozon Push">
+  ```javascript
+  // MoySklad stock update via API
+  await fetch('https://api.moysklad.ru/api/remap/1.2/entity/stock/adjustment', {
+    method: 'POST',
+    headers: { 'Authorization': 'Basic YOUR_MOYSKLAD_TOKEN' },
+    body: JSON.stringify({
+      positions: [{ assignees: [{ meta: { href: 'https://api.moysklad.ru/api/remap/1.2/entity/product/abc123' } }], quantity: 50 }]
+    })
+  });
+  ```
+  ```javascript
+  // SellerClub pushes to Ozon
+  await fetch('https://api.example.com/v1/inventory/ozon', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer YOUR_SELLECLUB_TOKEN' },
+    body: JSON.stringify({
+      sku: 'SKU123',
+      stock: 50,
+      warehouseId: 'WH001'
+    })
+  });
+  ```
+</CodeGroup>
+
+```mermaid
+sequenceDiagram
+  participant M as MoySklad
+  participant S as SellerClub
+  participant O as Ozon
+  M->>S: Stock changed
+  S->>O: Update stock
+  O->>S: Confirmed
+  S->>M: Sync complete
+```
+
+## Shipment Creation and Tracking
+
+Automate label generation and tracking with CDEK or 5Post. SellerClub creates shipments from MoySklad orders, attaches labels as PDFs, and updates tracking numbers back to sales platforms.
+
+<Steps>
+  <Step title="Integrate Delivery" icon="truck">
+    Add CDEK account: Enter `{CDEK_ACCOUNT}`, `{CDEK_PASSWORD}` in SellerClub settings.
+  </Step>
+  <Step title="Auto-Create Shipments" icon="package">
+    Enable rule: On MoySklad shipment status `shipped`, create CDEK order.
+  </Step>
+  <Step title="Track Updates" icon="map-pin">
+    Track ID `1234567890` syncs automatically to Ozon order.
+  </Step>
+</Steps>
+
+<ParamField path="trackingNumber" param-type="string" required="true">
+  Delivery service tracking ID, e.g., `CDEK:1234567890`.
+</ParamField>
+
+<Callout kind="tip">
+  Start with Ozon integration for quick wins. See [Quickstart](/quickstart) for setup.
+</Callout>

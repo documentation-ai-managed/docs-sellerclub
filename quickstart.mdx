@@ -1,0 +1,164 @@
+---
+title: Getting Started with SellerClub
+description: Set up your SellerClub account and connect your first MoySklad instance to a sales platform in just a few minutes.
+---
+
+## Prerequisites
+
+<Callout kind="info">
+Before starting, ensure you have:
+- An active MoySklad account with admin access
+- API credentials from MoySklad (login and password)
+- Accounts on Ozon or Wildberries seller platforms
+- A SellerClub account (free trial available)
+</Callout>
+
+## Create Your SellerClub Account
+
+Follow these steps to sign up and verify your account.
+
+<Steps>
+  <Step title="Sign Up" icon="user-plus">
+    Visit [https://dashboard.sellerclub.com](https://dashboard.sellerclub.com) and click "Create Account".
+
+    Enter your email, create a strong password, and submit the form.
+  </Step>
+
+  <Step title="Verify Email" icon="mail">
+    Check your inbox for a verification email from SellerClub.
+
+    Click the verification link to activate your account.
+  </Step>
+
+  <Step title="Complete Onboarding" icon="check-circle">
+    Log in to the dashboard and complete the quick onboarding wizard.
+
+    Accept the terms and set your default timezone.
+  </Step>
+</Steps>
+
+## Configure MoySklad API Access
+
+SellerClub requires MoySklad API credentials to sync inventory and orders.
+
+<Steps>
+  <Step title="Generate MoySklad Token" icon="key">
+    Log in to your MoySklad account at [https://online.moysklad.ru](https://online.moysklad.ru).
+
+    Navigate to Settings > API Access and generate a new private key.
+  </Step>
+
+  <Step title="Add Credentials to SellerClub" icon="settings">
+    In SellerClub dashboard, go to Integrations > MoySklad.
+
+    Enter your MoySklad login, password, and private key.
+  </Step>
+
+  <Step title="Test Connection" icon="zap">
+    Click "Test Connection" to verify access.
+
+    SellerClub will fetch a sample of your products.
+  </Step>
+</Steps>
+
+<CodeGroup tabs="cURL,JavaScript">
+````bash
+curl -X POST https://api.example.com/v1/moysklad/test \
+  -H "Authorization: Basic $(echo -n 'YOUR_MOYSKLAD_LOGIN:YOUR_MOYSKLAD_PASSWORD' | base64)" \
+  -H "Private-Key: YOUR_MOYSKLAD_PRIVATE_KEY" \
+  -d '{"accountId": "your-account-id"}'
+````
+
+````javascript
+const response = await fetch('https://api.example.com/v1/moysklad/test', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Basic ' + btoa('YOUR_MOYSKLAD_LOGIN:YOUR_MOYSKLAD_PASSWORD'),
+    'Private-Key': 'YOUR_MOYSKLAD_PRIVATE_KEY'
+  },
+  body: JSON.stringify({ accountId: 'your-account-id' })
+});
+const data = await response.json();
+console.log(data);
+````
+</CodeGroup>
+
+## Connect to Ozon or Wildberries
+
+Choose your sales platform and set up the integration.
+
+<Tabs>
+  <Tab title="Ozon" icon="shopping-cart">
+    <Steps>
+      <Step title="Get Ozon Client ID" icon="key">
+        In Ozon Seller dashboard, go to API Keys and create a new Client ID/Secret pair.
+      </Step>
+
+      <Step title="Add to SellerClub" icon="link">
+        In SellerClub, select Ozon integration.
+
+        Paste your Client ID, Client Secret, and store ID.
+      </Step>
+
+      <Step title="Sync Data" icon="refresh-cw">
+        Enable "Auto Sync Orders" and click "Connect".
+
+        Initial sync completes in under 5 minutes.
+      </Step>
+    </Steps>
+
+    <ParamField query="clientId" param-type="string" required="true">
+      Your Ozon Client ID.
+    </ParamField>
+
+    <ParamField query="clientSecret" param-type="string" required="true">
+      Your Ozon Client Secret.
+    </ParamField>
+  </Tab>
+
+  <Tab title="Wildberries" icon="package">
+    <Steps>
+      <Step title="Generate WB API Key" icon="key">
+        Log in to Wildberries Supplier panel.
+
+        Navigate to Settings > API Access and copy your API key.
+      </Step>
+
+      <Step title="Configure in SellerClub" icon="settings">
+        Choose Wildberries in SellerClub integrations.
+
+        Enter the API key and your supplier ID.
+      </Step>
+
+      <Step title="Verify Sync" icon="check-circle">
+        Test the connection and enable real-time order syncing.
+      </Step>
+    </Steps>
+
+    <ParamField header="Authorization" param-type="string" required="true">
+      Bearer `YOUR_WB_API_KEY`.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<Callout kind="tip">
+Your first connection is now live! Monitor the dashboard for sync status and initial order data.
+</Callout>
+
+## Next Steps
+
+Explore more features to automate your operations.
+
+<Columns cols={3}>
+  <Card title="Authentication" icon="shield" href="/authentication">
+    Secure your integrations with advanced auth methods.
+  </Card>
+
+  <Card title="Delivery Setup" icon="truck" href="/introduction#delivery">
+    Connect CDEK or 5Post for automated shipping.
+  </Card>
+
+  <Card title="Automation Rules" icon="zap" href="/quickstart#rules">
+    Set up rules for inventory and pricing sync.
+  </Card>
+</Columns>
